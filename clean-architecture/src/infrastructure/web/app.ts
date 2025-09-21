@@ -4,6 +4,7 @@ import { BookRoutes } from "./routers/bookRouter";
 import { userRoutes } from "./routers/userRouter";
 import { loanRoutes } from "./routers/loanRouter";
 import { PrismaClient } from "../../generated/prisma";
+import { PrismaTransactionManager } from "./../../adapter/utils/prismaTransactionManager";
 import { UuidGenerator } from "../../adapter/utils/uuidGenerator";
 import { PrismaBookRepository } from "../../adapter/repositories/prismaBookRepositry";
 import { BookController } from "../../adapter/controllers/bookController";
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 3000;
 
 const prisma = new PrismaClient();
 const uuidGenerator = new UuidGenerator();
+const transactionManager = new PrismaTransactionManager(prisma);
 
 // book
 const bookRepository = new PrismaBookRepository(prisma);
@@ -37,7 +39,8 @@ const loanRepository = new PrismaLoanRepository(prisma);
 const loanBookUseCase = new LoanBookUseCase(
   loanRepository,
   bookRepository,
-  uuidGenerator
+  uuidGenerator,
+  transactionManager
 );
 const loanController = new LoanController(loanBookUseCase);
 

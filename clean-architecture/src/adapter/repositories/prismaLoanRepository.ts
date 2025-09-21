@@ -1,12 +1,14 @@
 import { PrismaClient } from "../../generated/prisma";
 import { Loan } from "../../domain/entities/loan";
 import { LoanRepositoryInterface } from "../../domain/repositories/loanRepositoryInterface";
+import { TransactionContextInterface } from "../../domain/utils/transactionContextInterface";
 
 export class PrismaLoanRepository implements LoanRepositoryInterface {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(loan: Loan): Promise<Loan> {
-    const createdLoan = await this.prisma.loan.create({
+  async create(loan: Loan, ctx?: TransactionContextInterface): Promise<Loan> {
+    const prisma = ctx ? (ctx as PrismaClient) : this.prisma;
+    const createdLoan = await prisma.loan.create({
       data: {
         id: loan.id,
         bookId: loan.bookId,
@@ -30,8 +32,12 @@ export class PrismaLoanRepository implements LoanRepositoryInterface {
     );
   }
 
-  async findById(id: string): Promise<Loan | null> {
-    const foundLoan = await this.prisma.loan.findUnique({
+  async findById(
+    id: string,
+    ctx?: TransactionContextInterface
+  ): Promise<Loan | null> {
+    const prisma = ctx ? (ctx as PrismaClient) : this.prisma;
+    const foundLoan = await prisma.loan.findUnique({
       where: { id },
     });
 
@@ -48,8 +54,12 @@ export class PrismaLoanRepository implements LoanRepositoryInterface {
     );
   }
 
-  async findByUserId(userId: string): Promise<Loan[]> {
-    const foundLoans = await this.prisma.loan.findMany({
+  async findByUserId(
+    userId: string,
+    ctx?: TransactionContextInterface
+  ): Promise<Loan[]> {
+    const prisma = ctx ? (ctx as PrismaClient) : this.prisma;
+    const foundLoans = await prisma.loan.findMany({
       where: { userId },
     });
 

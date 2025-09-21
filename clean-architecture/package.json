@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/infrastructure/web/app.ts",
     "test": "jest",
-    "generate": "ts-node-dev tools/generateFiles.ts"
+    "generate": "ts-node-dev tools/generateFiles.ts",
+    "cli": "ts-node-dev src/infrastructure/cli/app.ts"
   },
   "keywords": [],
   "author": "",

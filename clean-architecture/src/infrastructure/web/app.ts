@@ -16,6 +16,7 @@ import { UserController } from "../../adapter/controllers/userController";
 import { PrismaLoanRepository } from "../../adapter/repositories/prismaLoanRepository";
 import { LoanBookUseCase } from "../../application/usecases/loan/loanBookUseCase";
 import { LoanController } from "../../adapter/controllers/loanController";
+import { ReturnBookUseCase } from "../../application/usecases/loan/returnBookUseCase";
 
 const app = express();
 app.use(express.json());
@@ -42,7 +43,12 @@ const loanBookUseCase = new LoanBookUseCase(
   uuidGenerator,
   transactionManager
 );
-const loanController = new LoanController(loanBookUseCase);
+const returnBookUseCase = new ReturnBookUseCase(
+  loanRepository,
+  bookRepository,
+  transactionManager
+);
+const loanController = new LoanController(loanBookUseCase, returnBookUseCase);
 
 app.get("/", (req, res) => res.send("Hello World"));
 app.use("/books", BookRoutes(bookController));

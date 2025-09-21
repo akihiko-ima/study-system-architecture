@@ -5,6 +5,7 @@ export function loanRoutes(loanController: LoanController): Router {
   const router = Router();
 
   router.post("/", (req, res) => loanController.loanBook(req, res));
+  router.post("/return", (req, res) => loanController.returnBook(req, res));
 
   return router;
 }
